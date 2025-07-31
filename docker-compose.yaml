@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  event-service:
+    build:
+      context: ./apps/event-service
+      dockerfile: Dockerfile
+    ports:
+      - '50052:50052'
+    networks:
+      - ticket-booking-network
+    environment:
+      - NODE_ENV=production
+
+  ticket-service:
+    build:
+      context: ./apps/ticket-service
+      dockerfile: Dockerfile
+    ports:
+      - '50051:50051'
+    networks:
+      - ticket-booking-network
+    environment:
+      - NODE_ENV=production
+
+  api-gateway:
+    build:
+      context: ./apps/api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+      - ticket-booking-network
+    environment:
+      - NODE_ENV=production
+      - EVENT_SERVICE_HOST=event-service:50052
+      - TICKET_SERVICE_HOST=ticket-service:50051
+    depends_on:
+      - event-service
+      - ticket-service
+
+networks:
+  ticket-booking-network:
+    driver: bridge
