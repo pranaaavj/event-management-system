@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package ticket;
+
+service TicketService {
+  rpc CreateTicket (CreateTicketRequest) returns (TicketResponse);
+  rpc BookTicket (BookTicketRequest) returns (TicketResponse);
+}
+
+message CreateTicketRequest {
+  string eventId = 1;
+  string seat = 2;
+}
+
+message BookTicketRequest {
+  string ticketId = 1;
+}
+
+message TicketResponse {
+  string ticketId = 1;
+  string eventId = 2;
+  string seat = 3;
+  string status = 4;
+}

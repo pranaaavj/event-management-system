@@ -2,9 +2,17 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - feature/cicd-setup
+  # Optionally keep pull_request for testing
+  # pull_request:
+  #   branches:
+  #     - feature/cicd-setup
+permissions:
+  contents: read
+  actions: read
+
 jobs:
-  build-and-test:
+  build-and-push:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -12,28 +20,36 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      - name: Install Dependencies
-        run: npm install
-        working-directory: apps/${{ matrix.service }}
-      - name: Run Tests
-        run: npm test
-        working-directory: apps/${{ matrix.service }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Debug Secrets
+        run: |
+          echo "DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}"
+          echo "DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}"
+          echo "RENDER_WEBHOOK_URL: ${{ secrets.RENDER_WEBHOOK_URL }}"
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          RENDER_WEBHOOK_URL: ${{ secrets.RENDER_WEBHOOK_URL }}
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest apps/${{ matrix.service }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest
+          docker buildx build --platform linux/amd64 \
+            -f apps/${{ matrix.service }}/Dockerfile \
+            -t pranaaavj/${{ matrix.service }}:latest \
+            . --push
 
   deploy:
-    needs: build-and-test
+    needs: build-and-push
+    if: github.event_name == 'push' && github.ref == 'refs/heads/feature/cicd-setup'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render Deployment

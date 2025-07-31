@@ -1,3 +1,4 @@
+# Create an Event
 POST  http://localhost:3000/api/events
 Content-Type: application/json
 
@@ -6,26 +7,21 @@ Content-Type: application/json
 }
 
 ###
-
-GET  http://localhost:3000/api/events/71527175-ffd7-42a2-8e0c-0a419cc64c45
+# Get an Event
+GET  http://localhost:3000/api/events/56e435d3-b05d-4718-9671-d1f8726231a4
 Content-Type: application/json
 
-###
-
+### 
+# Create tickets and seat number
 POST  http://localhost:3000/api/tickets
 Content-Type: application/json
 
 {
-  "eventId": "71527175-ffd7-42a2-8e0c-0a419cc64c45",
-  "seat": "A1"
+  "eventId": "56e435d3-b05d-4718-9671-d1f8726231a4",
+  "seat": "3"
 }
 
 ###
- 
-PATCH  http://localhost:3000/api/tickets/2118d80c-6761-4a59-ae45-360ee146458c/book
+# Book that seat using the ticket number
+PATCH  http://localhost:3000/api/tickets/f71eb879-5e05-4ada-b3ee-125642068d7d/book
 Content-Type: application/json
-
-{
-  "eventId": "71527175-ffd7-42a2-8e0c-0a419cc64c45",
-  "seat": "A1"
-}

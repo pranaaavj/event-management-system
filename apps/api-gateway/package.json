@@ -5,6 +5,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "npm run build && node dist/index.js",
+    "start": "node src/index.js",
     "lint": "eslint src/**/*.ts",
     "check-types": "tsc --noEmit"
   },
