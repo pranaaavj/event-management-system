@@ -1,0 +1,26 @@
+{
+  "name": "proto",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": true,
+  "scripts": {
+    "generate": "protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src --ts_proto_opt=outputServices=grpc-js,env=node,useOptionals=messages,exportCommonSymbols=false --proto_path=./src event.proto ticket.proto",
+    "build": "npm run generate && tsc",
+    "lint": "echo \"No strict linting for proto package\" && exit 0",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "grpc-tools": "^1.12.4",
+    "ts-proto": "^1.169.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.9.14",
+    "@grpc/proto-loader": "^0.7.10"
+  },
+  "exports": {
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*"
+  }
+}

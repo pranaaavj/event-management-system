@@ -1,0 +1,31 @@
+POST  http://localhost:3000/api/events
+Content-Type: application/json
+
+{
+  "name": "Cold play concert"
+}
+
+###
+
+GET  http://localhost:3000/api/events/71527175-ffd7-42a2-8e0c-0a419cc64c45
+Content-Type: application/json
+
+###
+
+POST  http://localhost:3000/api/tickets
+Content-Type: application/json
+
+{
+  "eventId": "71527175-ffd7-42a2-8e0c-0a419cc64c45",
+  "seat": "A1"
+}
+
+###
+ 
+PATCH  http://localhost:3000/api/tickets/2118d80c-6761-4a59-ae45-360ee146458c/book
+Content-Type: application/json
+
+{
+  "eventId": "71527175-ffd7-42a2-8e0c-0a419cc64c45",
+  "seat": "A1"
+}

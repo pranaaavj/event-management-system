@@ -1,0 +1,21 @@
+{
+  "name": "event-service",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "dev": "npm run build && node dist/index.js",
+    "lint": "eslint src/**/*.ts",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.9.14",
+    "@grpc/proto-loader": "^0.7.10",
+    "proto": "file:",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "typescript": "^5.0.4"
+  }
+}
