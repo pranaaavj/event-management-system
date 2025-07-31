@@ -1,16 +1,9 @@
-import { handleUnaryCall } from '@grpc/grpc-js';
 import { v4 as uuidv4 } from 'uuid';
 
-type Ticket = {
-  ticketId: string;
-  eventId: string;
-  seat: string;
-  status: string;
-};
-const tickets: Ticket[] = [];
+const tickets = [];
 
-export const createTicket: handleUnaryCall<any, any> = (call, callback) => {
-  const ticket: Ticket = {
+export const createTicket = (call, callback) => {
+  const ticket = {
     ticketId: uuidv4(),
     eventId: call.request.eventId,
     seat: call.request.seat,
@@ -25,7 +18,7 @@ export const createTicket: handleUnaryCall<any, any> = (call, callback) => {
   });
 };
 
-export const bookTicket: handleUnaryCall<any, any> = (call, callback) => {
+export const bookTicket = (call, callback) => {
   const ticket = tickets.find((t) => t.ticketId === call.request.ticketId);
   if (!ticket) {
     callback(new Error('Ticket not found'), null);
